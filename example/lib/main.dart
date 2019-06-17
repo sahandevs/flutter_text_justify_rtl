@@ -3,6 +3,11 @@ import 'package:flutter_text_justify_rtl/flutter_text_justify_rtl.dart';
 
 void main() => runApp(MyApp());
 
+var para = """
+لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد. کتابهای زیادی در شصت و سه درصد گذشته، حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی و فرهنگ پیشرو در زبان فارسی ایجاد کرد. در این صورت می توان امید داشت که تمام و دشواری موجود در ارائه راهکارها و شرایط سخت تایپ به پایان رسد و زمان مورد نیاز شامل حروفچینی دستاوردهای اصلی و جوابگوی nturies, but also the leap into  سوالات پیوسته اهل  اساسا مورد استفاده قرار گیرد. 
+"""
+    .trim();
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -27,14 +32,23 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: TextJustifyRTL()
-      ),
+      body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: ListView(children: [
+            LayoutBuilder(
+              builder: (context, c) => TextJustifyRTL(
+                para,
+                textDirection: TextDirection.rtl,
+                style: Theme.of(context).textTheme.subtitle,
+                boxConstraints: c,
+              ),
+            ),
+          ])),
     );
   }
 }
