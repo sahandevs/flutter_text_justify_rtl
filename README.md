@@ -2,13 +2,10 @@
 
 Temporary solution for Text widget not supporting TextAlign.JustifyRTL ( flutter issue #30986 )
 
-## Getting Started
+https://github.com/flutter/flutter/issues/30986
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+# IMPORTANT !
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+this is just a temporary solution and it is not an efficient code, if something better popped up or
+flutter team fixed the issue use that.
+
