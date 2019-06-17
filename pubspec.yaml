@@ -1,8 +1,8 @@
 name: flutter_text_justify_rtl
 description: Temporary solution for Text widget not supporting TextAlign.JustifyRTL ( flutter issue #30986 )
 version: 0.0.1
-author:
-homepage:
+author: Sahand <sahandevs@gmail.com>
+homepage: https://github.com/SahandAkbarzadeh/flutter_text_justify_rtl
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
