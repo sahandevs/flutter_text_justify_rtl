@@ -9,3 +9,11 @@ https://github.com/flutter/flutter/issues/30986
 this is just a temporary solution and it is not an efficient code, if something better popped up or
 flutter team fixed the issue use that.
 
+
+## Getting Started
+
+```yaml
+dependencies:
+  # others
+  flutter_text_justify_rtl: ^0.0.1
+```
