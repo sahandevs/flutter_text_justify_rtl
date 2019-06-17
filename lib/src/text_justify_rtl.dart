@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-var _englishSentenceRegex = new RegExp(r"\b((?!=|\,|\.).)+(.)\b");
+var _englishSentenceRegex = new RegExp(r"\b((?!=|\.).)+(.)\b");
 
 class TextJustifyRTL extends StatelessWidget {
   final String text;
