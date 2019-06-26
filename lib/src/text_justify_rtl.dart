@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 
 var _englishSentenceRegex = new RegExp(r"\b((?!=|\.).)+(.)\b");
 
-class TextJustifyRTL extends StatelessWidget {
+class TextJustifyRTL extends StatefulWidget {
   final String text;
   final TextDirection textDirection;
   final TextStyle style;
@@ -28,8 +28,30 @@ class TextJustifyRTL extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  _TextJustifyRTLState createState() => _TextJustifyRTLState();
+}
+
+class _TextJustifyRTLState extends State<TextJustifyRTL>
+    with AutomaticKeepAliveClientMixin {
+
+  Widget _widget;
+
+  @override
+  void didUpdateWidget(TextJustifyRTL oldWidget) {
+    if (oldWidget.text != widget.text)
+      setState(() {
+        _widget = null;
+      });
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return _createJustifiedText(boxConstraints, style, text);
+    super.build(context);
+    if (_widget == null)
+      _widget = _createJustifiedText(
+          widget.boxConstraints, widget.style, widget.text);
+    return _widget;
   }
 
   Widget _createJustifiedText(
@@ -79,7 +101,7 @@ class TextJustifyRTL extends StatelessWidget {
 
   Widget createRow(List<Widget> words, int remainingSpace) {
     Widget _row;
-    if (remainingSpace > boxConstraints.maxWidth.floor() / 3)
+    if (remainingSpace > widget.boxConstraints.maxWidth.floor() / 3)
       _row = Row(
         children: joinWidget(words, SizedBox(width: 4)),
       );
@@ -88,7 +110,7 @@ class TextJustifyRTL extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: words,
       );
-    return Directionality(textDirection: textDirection, child: _row);
+    return Directionality(textDirection: widget.textDirection, child: _row);
   }
 
   List<Widget> joinWidget(List<Widget> widgets, Widget widget) {
@@ -102,10 +124,10 @@ class TextJustifyRTL extends StatelessWidget {
 
   Text _createText(String text) => Text(
         text,
-        strutStyle: strutStyle,
-        style: style,
-        textScaleFactor: textScaleFactor,
-        textDirection: textDirection,
+        strutStyle: widget.strutStyle,
+        style: widget.style,
+        textScaleFactor: widget.textScaleFactor,
+        textDirection: widget.textDirection,
       );
 
   List<String> _calcNumberOfWordsInEachLine(
@@ -132,17 +154,19 @@ class TextJustifyRTL extends StatelessWidget {
     return _lines.map((words) => words.join(" ")).toList();
   }
 
-  int _calculateStringSize(
-      BoxConstraints size, TextStyle style, String text) {
+  int _calculateStringSize(BoxConstraints size, TextStyle style, String text) {
     var span = TextSpan(style: style, text: text);
     var tp = TextPainter(
       text: span,
       textAlign: TextAlign.right,
-      textDirection: textDirection,
-      textScaleFactor: textScaleFactor ?? 1,
+      textDirection: widget.textDirection,
+      textScaleFactor: widget.textScaleFactor ?? 1,
       maxLines: 1,
     );
     tp.layout(maxWidth: size.maxWidth.round().toDouble());
     return tp.width.floor();
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
