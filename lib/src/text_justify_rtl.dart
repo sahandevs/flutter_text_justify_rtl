@@ -42,10 +42,10 @@ class TextJustifyRTL extends StatelessWidget {
     // calculate number of words in each line with average char size
     var lines = _calcNumberOfWordsInEachLine(size, style, text);
     // calculate each line remaining space
-    List<double> remainingSpace = [];
+    List<int> remainingSpace = [];
     for (var line in lines)
       remainingSpace
-          .add(size.maxWidth - _calculateStringSize(size, style, line));
+          .add(size.maxWidth.floor() - _calculateStringSize(size, style, line));
     // convert each line words to a Text widget
     List<List<Widget>> lineWidgets = lines
         .map((line) => line.split(" "))
@@ -77,9 +77,9 @@ class TextJustifyRTL extends StatelessWidget {
     return result;
   }
 
-  Widget createRow(List<Widget> words, double remainingSpace) {
+  Widget createRow(List<Widget> words, int remainingSpace) {
     Widget _row;
-    if (remainingSpace > boxConstraints.maxWidth / 3)
+    if (remainingSpace > boxConstraints.maxWidth.floor() / 3)
       _row = Row(
         children: joinWidget(words, SizedBox(width: 4)),
       );
@@ -109,7 +109,10 @@ class TextJustifyRTL extends StatelessWidget {
       );
 
   List<String> _calcNumberOfWordsInEachLine(
-      BoxConstraints size, TextStyle style, String text) {
+    BoxConstraints size,
+    TextStyle style,
+    String text,
+  ) {
     // TODO: add support for new lines
     var _words = text.replaceAll("\n", " ").split(" ");
     List<List<String>> _lines = [[]];
@@ -118,7 +121,7 @@ class TextJustifyRTL extends StatelessWidget {
     for (var word in _words) {
       var linesSizeWithWord = _calculateStringSize(
           size, style, (_lines[_currentLine] + [word]).join(" "));
-      if (linesSizeWithWord >= size.maxWidth) {
+      if (linesSizeWithWord >= size.maxWidth.floor()) {
         _currentLine += 1;
         _lines.add([]);
         _lines[_currentLine].add(word);
@@ -129,7 +132,7 @@ class TextJustifyRTL extends StatelessWidget {
     return _lines.map((words) => words.join(" ")).toList();
   }
 
-  double _calculateStringSize(
+  int _calculateStringSize(
       BoxConstraints size, TextStyle style, String text) {
     var span = TextSpan(style: style, text: text);
     var tp = TextPainter(
@@ -139,7 +142,7 @@ class TextJustifyRTL extends StatelessWidget {
       textScaleFactor: textScaleFactor ?? 1,
       maxLines: 1,
     );
-    tp.layout(maxWidth: size.maxWidth);
-    return tp.width;
+    tp.layout(maxWidth: size.maxWidth.round().toDouble());
+    return tp.width.floor();
   }
 }
