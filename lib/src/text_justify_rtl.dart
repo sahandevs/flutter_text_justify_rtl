@@ -98,6 +98,7 @@ class _TextJustifyRTLState extends State<TextJustifyRTL>
     for (int i = 0; i < words.length; i++) {
       result += splitted[i] + words[i];
     }
+    result += splitted.last;
 
     // reverse english sentences
     List<String> englishSentences = _matchEnglishSentence
