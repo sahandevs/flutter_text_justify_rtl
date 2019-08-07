@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-var _englishSentenceRegex = new RegExp(r"\b((?!=|\.).)+(.)\b");
+var _matchEnglishAndNumbers = new RegExp(r"\b(\w*[a-zA-Z0-9]\w*)\b");
+var _matchEnglishSentence = new RegExp(r"\b((?!=|\,|\.)[a-zA-Z\s])+(.)\b");
 
 class TextJustifyRTL extends StatefulWidget {
   final String text;
@@ -33,7 +34,6 @@ class TextJustifyRTL extends StatefulWidget {
 
 class _TextJustifyRTLState extends State<TextJustifyRTL>
     with AutomaticKeepAliveClientMixin {
-
   Widget _widget;
 
   @override
@@ -60,7 +60,7 @@ class _TextJustifyRTLState extends State<TextJustifyRTL>
     String _text,
   ) {
     // reverse english sentences because it will display them in reverse
-    String text = _reverseEnglishSentence(_text);
+    String text = _reverseNumbersAndEnglishWords(_text);
     // calculate number of words in each line with average char size
     var lines = _calcNumberOfWordsInEachLine(size, style, text);
     // calculate each line remaining space
@@ -85,17 +85,33 @@ class _TextJustifyRTLState extends State<TextJustifyRTL>
     );
   }
 
-  String _reverseEnglishSentence(String text) {
-    List<String> sentences = _englishSentenceRegex
+  String _reverseNumbersAndEnglishWords(String text) {
+    List<String> words = _matchEnglishAndNumbers
         .allMatches(text)
         .map((match) => match.group(0))
         .toList();
-    var result = text;
 
-    for (var sentence in sentences) {
-      result =
-          result.replaceAll(sentence, sentence.split(" ").reversed.join(" "));
+    List<String> splitted = text.split(_matchEnglishAndNumbers);
+
+    var result = "";
+
+    for (int i = 0; i < words.length; i++) {
+      result += splitted[i] + words[i];
     }
+
+    // reverse english sentences
+    List<String> englishSentences = _matchEnglishSentence
+        .allMatches(result)
+        .map((match) => match.group(0))
+        .toList();
+
+    for (var sentence in englishSentences) {
+      result = result.replaceAll(
+        sentence,
+        sentence.split(" ").reversed.join(" "),
+      );
+    }
+
     return result;
   }
 
